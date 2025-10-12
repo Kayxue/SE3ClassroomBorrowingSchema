@@ -15,6 +15,13 @@
       "when": 1760253875780,
       "tag": "0001_blushing_maggott",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760262333197,
+      "tag": "0002_clear_the_twelve",
+      "breakpoints": true
     }
   ]
 }
