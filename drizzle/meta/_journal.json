@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1760236930314,
-      "tag": "0000_sloppy_psynapse",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1760253875780,
-      "tag": "0001_blushing_maggott",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1760262333197,
-      "tag": "0002_clear_the_twelve",
+      "when": 1760267840213,
+      "tag": "0000_futuristic_pete_wisdom",
       "breakpoints": true
     }
   ]

@@ -9,8 +9,12 @@ export const user = pgTable("user", {
 	password: text("password").notNull(),
 	phoneNumber: text("phone_number").notNull(),
 	role: role("role").notNull(),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
 });
 
 export const classroom = pgTable("classroom", {
@@ -21,6 +25,10 @@ export const classroom = pgTable("classroom", {
 	status: text("status", {
 		enum: ["available", "unavailable", "cannot use"],
 	}).notNull(),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
 });
