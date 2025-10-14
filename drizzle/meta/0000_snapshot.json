@@ -1,5 +1,5 @@
 {
-  "id": "0f556d4f-c6e8-4459-b4a3-9eed840f7781",
+  "id": "fd71a9d1-0fde-4921-84fa-11a27e43b6bf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "varchar(21)",
           "primaryKey": true,
           "notNull": true
         },
@@ -28,7 +28,7 @@
         },
         "capacity": {
           "name": "capacity",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -67,7 +67,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "text",
+          "type": "varchar(21)",
           "primaryKey": true,
           "notNull": true
         },

@@ -1,9 +1,16 @@
-import { pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+	integer,
+	pgEnum,
+	pgTable,
+	text,
+	timestamp,
+	varchar,
+} from "drizzle-orm/pg-core";
 
 export const role = pgEnum("role", ["admin", "user"]);
 
 export const user = pgTable("user", {
-	id: text("id").primaryKey(),
+	id: varchar("id", { length: 21 }).primaryKey(),
 	username: text("username").notNull().unique(),
 	email: text("email").notNull().unique(),
 	password: text("password").notNull(),
@@ -18,10 +25,10 @@ export const user = pgTable("user", {
 });
 
 export const classroom = pgTable("classroom", {
-	id: text("id").primaryKey(),
+	id: varchar("id", { length: 21 }).primaryKey(),
 	name: text("name").notNull(),
 	location: text("location").notNull(),
-	capacity: text("capacity").notNull(),
+	capacity: integer("capacity").notNull(),
 	status: text("status", {
 		enum: ["available", "unavailable", "cannot use"],
 	}).notNull(),
