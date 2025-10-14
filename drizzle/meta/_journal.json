@@ -8,6 +8,13 @@
       "when": 1760439641220,
       "tag": "0000_free_the_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1760440055695,
+      "tag": "0001_far_mercury",
+      "breakpoints": true
     }
   ]
 }

@@ -9,7 +9,11 @@ import {
 
 export const role = pgEnum("role", ["admin", "user"]);
 
-export const status = pgEnum("status", ["available", "occupied", "maintenance"]);
+export const status = pgEnum("status", [
+	"available",
+	"occupied",
+	"maintenance",
+]);
 
 export const user = pgTable("user", {
 	id: varchar("id", { length: 21 }).primaryKey(),
@@ -31,7 +35,7 @@ export const classroom = pgTable("classroom", {
 	name: text("name").notNull(),
 	location: text("location").notNull(),
 	capacity: integer("capacity").notNull(),
-	status: status("statue").notNull(),
+	status: status("status").notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.defaultNow()
 		.notNull(),
