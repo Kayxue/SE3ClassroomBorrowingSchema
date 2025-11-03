@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, relations } from "drizzle-orm";
 import {
 	boolean,
 	integer,
@@ -138,3 +138,67 @@ export const keyTransactionLog = pgTable("key_transaction_log", {
 		.defaultNow()
 		.notNull(),
 })
+
+export const userRelation = relations(user, ({ many }) => ({
+	infractions: many(infraction),
+	keyTransactions: many(keyTransactionLog),
+	notificationLogs: many(notificationLog),
+	announcements: many(announcement),
+	blacklists: many(blacklist),
+	bookingChangeLogs: many(bookingChangeLog),
+	reservations: many(reservation),
+}))
+
+export const blacklistRelation = relations(blacklist, ({ one }) => ({
+	infraction: one(infraction, { fields: [blacklist.infractionId], references: [infraction.id] }),
+	user: one(user, { fields: [blacklist.userId], references: [user.id] }),
+	createdByUser: one(user, { fields: [blacklist.createdBy], references: [user.id] }),
+
+}))
+
+export const announcementRelation = relations(announcement, ({ one }) => ({
+	createdByUser: one(user, { fields: [announcement.createdBy], references: [user.id] }),
+}));
+
+export const infractionRelation = relations(infraction, ({ one }) => ({
+	user: one(user, { fields: [infraction.userId], references: [user.id] }),
+	createdByUser: one(user, { fields: [infraction.createdBy], references: [user.id] }),
+	reservation: one(reservation, { fields: [infraction.reservationId], references: [reservation.id] }),
+	blacklist: one(blacklist, { fields: [infraction.id], references: [blacklist.infractionId] }),
+}))
+
+export const notification_logRelation = relations(notificationLog, ({ one }) => ({
+	user: one(user, { fields: [notificationLog.userId], references: [user.id] }),
+	bookingChangeLog: one(bookingChangeLog, { fields: [notificationLog.bookingChangeLogId], references: [bookingChangeLog.id] }),
+}));
+
+export const keyTransactionLogRelation = relations(keyTransactionLog, ({ one }) => ({
+	brrowedToUser: one(user, { fields: [keyTransactionLog.borrowedTo], references: [user.id] }),
+	handledByUser: one(user, { fields: [keyTransactionLog.handledBy], references: [user.id] }),
+	reservation: one(reservation, { fields: [keyTransactionLog.reservationId], references: [reservation.id] }),
+	key: one(key, { fields: [keyTransactionLog.keyId], references: [key.id] }),
+}));
+
+export const keyRelation = relations(key, ({ one, many }) => ({
+	classroom: one(classroom, { fields: [key.classroomId], references: [classroom.id] }),
+	keyTransactionLogs: many(keyTransactionLog),
+}));
+
+export const classroomRelation = relations(classroom, ({ many }) => ({
+	keys: many(key),
+	reservations: many(reservation),
+}));
+
+export const booking_change_logRelation = relations(bookingChangeLog, ({ one }) => ({
+	actorUser: one(user, { fields: [bookingChangeLog.actorUserId], references: [user.id] }),
+	reservation: one(reservation, { fields: [bookingChangeLog.reservationId], references: [reservation.id] }),
+}));
+
+export const reservationRelation = relations(reservation, ({ one, many }) => ({
+	user: one(user, { fields: [reservation.userId], references: [user.id] }),
+	classroom: one(classroom, { fields: [reservation.classroomId], references: [classroom.id] }),
+	approvedByUser: one(user, { fields: [reservation.approvedBy], references: [user.id] }),
+	bookingChangeLogs: many(bookingChangeLog),
+	infraction: one(infraction, { fields: [reservation.id], references: [infraction.reservationId] }),
+	keyTransactionLog: one(keyTransactionLog, { fields: [reservation.id], references: [keyTransactionLog.reservationId] }),
+}));
