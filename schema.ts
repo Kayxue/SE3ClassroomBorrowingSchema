@@ -51,7 +51,7 @@ export const classroom = pgTable("classroom", {
 	updatedAt: timestamp("updated_at", { withTimezone: true })
 		.defaultNow()
 		.notNull(),
-	photoUrl: text("photo_url").notNull(),
+	photoId: text("photo_id").notNull(),
 });
 
 
