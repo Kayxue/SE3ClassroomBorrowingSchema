@@ -39,7 +39,6 @@ export const user = pgTable("user", {
 
 export const classroom = pgTable("classroom", {
 	id: varchar("id", { length: 21 }).primaryKey(),
-	roomCode: text("room_code").notNull().unique(),
 	name: text("name").notNull(),
 	location: text("location").notNull(),
 	capacity: integer("capacity").notNull(),
