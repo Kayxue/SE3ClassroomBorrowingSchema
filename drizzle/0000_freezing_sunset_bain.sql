@@ -1,7 +1,7 @@
 CREATE TYPE "public"."BookingChangeAction" AS ENUM('approve', 'reject');--> statement-breakpoint
+CREATE TYPE "public"."ClassroomStatus" AS ENUM('available', 'occupied', 'maintenance');--> statement-breakpoint
 CREATE TYPE "public"."ReservationStatus" AS ENUM('pending', 'approved', 'rejected');--> statement-breakpoint
-ALTER TYPE "public"."status" RENAME TO "ClassroomStatus";--> statement-breakpoint
-ALTER TYPE "public"."role" RENAME TO "Role";--> statement-breakpoint
+CREATE TYPE "public"."Role" AS ENUM('admin', 'user');--> statement-breakpoint
 CREATE TABLE "announcement" (
 	"id" varchar(21) PRIMARY KEY NOT NULL,
 	"title" text NOT NULL,
@@ -25,6 +25,18 @@ CREATE TABLE "booking_change_log" (
 	"actor_user_id" varchar(21),
 	"action" "BookingChangeAction" NOT NULL,
 	"reservation_id" varchar(21)
+);
+--> statement-breakpoint
+CREATE TABLE "classroom" (
+	"id" varchar(21) PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"location" text NOT NULL,
+	"capacity" integer NOT NULL,
+	"description" text NOT NULL,
+	"status" "ClassroomStatus" NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"photo_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "infraction" (
@@ -76,10 +88,20 @@ CREATE TABLE "reservation" (
 	"end_time" timestamp with time zone NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "classroom" ADD COLUMN "room_code" text NOT NULL;--> statement-breakpoint
-ALTER TABLE "classroom" ADD COLUMN "description" text NOT NULL;--> statement-breakpoint
-ALTER TABLE "classroom" ADD COLUMN "photo_url" text NOT NULL;--> statement-breakpoint
-ALTER TABLE "user" ADD COLUMN "name" text NOT NULL;--> statement-breakpoint
+CREATE TABLE "user" (
+	"id" varchar(21) PRIMARY KEY NOT NULL,
+	"username" text NOT NULL,
+	"name" text NOT NULL,
+	"email" text NOT NULL,
+	"password" text NOT NULL,
+	"phone_number" text NOT NULL,
+	"role" "Role" NOT NULL,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "user_username_unique" UNIQUE("username"),
+	CONSTRAINT "user_email_unique" UNIQUE("email")
+);
+--> statement-breakpoint
 ALTER TABLE "announcement" ADD CONSTRAINT "announcement_created_by_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "black_list" ADD CONSTRAINT "black_list_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "black_list" ADD CONSTRAINT "black_list_infraction_id_infraction_id_fk" FOREIGN KEY ("infraction_id") REFERENCES "public"."infraction"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -98,5 +120,4 @@ ALTER TABLE "notification_log" ADD CONSTRAINT "notification_log_user_id_user_id_
 ALTER TABLE "notification_log" ADD CONSTRAINT "notification_log_booking_change_log_id_booking_change_log_id_fk" FOREIGN KEY ("booking_change_log_id") REFERENCES "public"."booking_change_log"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reservation" ADD CONSTRAINT "reservation_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reservation" ADD CONSTRAINT "reservation_classroom_id_classroom_id_fk" FOREIGN KEY ("classroom_id") REFERENCES "public"."classroom"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "reservation" ADD CONSTRAINT "reservation_approved_by_user_id_fk" FOREIGN KEY ("approved_by") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "classroom" ADD CONSTRAINT "classroom_room_code_unique" UNIQUE("room_code");
+ALTER TABLE "reservation" ADD CONSTRAINT "reservation_approved_by_user_id_fk" FOREIGN KEY ("approved_by") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;

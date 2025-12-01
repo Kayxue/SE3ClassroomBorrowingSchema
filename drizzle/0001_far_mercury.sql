@@ -1,2 +1,0 @@
-CREATE TYPE "public"."status" AS ENUM('available', 'occupied', 'maintenance');--> statement-breakpoint
-ALTER TABLE "classroom" ALTER COLUMN "status" SET DATA TYPE "public"."status" USING "status"::"public"."status";
