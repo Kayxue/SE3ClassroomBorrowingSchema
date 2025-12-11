@@ -112,7 +112,6 @@ export const blacklist = pgTable("black_list", {
 		.defaultNow()
 		.notNull(),
 	endAt: timestamp("end_at", { withTimezone: true }),
-
 })
 
 export const notificationLog = pgTable("notification_log", {
@@ -131,6 +130,7 @@ export const keyTransactionLog = pgTable("key_transaction_log", {
 	borrowedTo: varchar("borrowed_to", { length: 21 }).references(() => user.id, { onDelete: "set null" }),
 	handledBy: varchar("handled_by", { length: 21 }).references(() => user.id, { onDelete: "set null" }),
 	borrowedAt: timestamp("borrowed_at", { withTimezone: true }).notNull(),
+	deadline: timestamp("deadline", { withTimezone: true }).notNull(),
 	returnedAt: timestamp("returned_at", { withTimezone: true }),
 	onTime: boolean("on_time").default(true).notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true })

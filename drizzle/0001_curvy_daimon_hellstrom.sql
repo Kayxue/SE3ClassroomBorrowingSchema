@@ -1,0 +1,1 @@
+ALTER TABLE "key_transaction_log" ADD COLUMN "deadline" timestamp with time zone NOT NULL;
