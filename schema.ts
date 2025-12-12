@@ -199,5 +199,5 @@ export const reservationRelation = relations(reservation, ({ one, many }) => ({
 	approvedByUser: one(user, { fields: [reservation.approvedBy], references: [user.id] }),
 	bookingChangeLogs: many(bookingChangeLog),
 	infraction: one(infraction, { fields: [reservation.id], references: [infraction.reservationId] }),
-	keyTransactionLog: one(keyTransactionLog, { fields: [reservation.id], references: [keyTransactionLog.reservationId] }),
+	keyTransactionLogs: many(keyTransactionLog),
 }));
