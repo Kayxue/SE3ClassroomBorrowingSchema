@@ -13,8 +13,6 @@ export const role = pgEnum("Role", ["admin", "user"]);
 
 export const reservationStatus = pgEnum("ReservationStatus", ["pending", "approved", "rejected"]);
 
-export const bookingChangeAction = pgEnum("BookingChangeAction", ["approve", "reject"]);
-
 export const classroomStatus = pgEnum("ClassroomStatus", [
 	"available",
 	"occupied",
