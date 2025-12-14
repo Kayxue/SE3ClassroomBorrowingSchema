@@ -84,14 +84,6 @@ export const reservation = pgTable("reservation", {
 	endTime: timestamp("end_time", { withTimezone: true }).notNull(),
 });
 
-export const bookingChangeLog = pgTable("booking_change_log", {
-	id: varchar("id", { length: 21 }).primaryKey(),
-	actionTime: timestamp("action_time", { withTimezone: true }).notNull().defaultNow(),
-	actorUserId: varchar("actor_user_id", { length: 21 }).references(() => user.id, { onDelete: "set null" }),
-	action: bookingChangeAction("action").notNull(),
-	reservationId: varchar("reservation_id", { length: 21 }).references(() => reservation.id, { onDelete: "set null" }),
-})
-
 export const infraction = pgTable("infraction", {
 	id: varchar("id", { length: 21 }).primaryKey(),
 	userId: varchar("user_id", { length: 21 }).references(() => user.id, { onDelete: "set null" }),
@@ -114,15 +106,6 @@ export const blacklist = pgTable("black_list", {
 	endAt: timestamp("end_at", { withTimezone: true }),
 })
 
-export const notificationLog = pgTable("notification_log", {
-	id: varchar("id", { length: 21 }).primaryKey(),
-	userId: varchar("user_id", { length: 21 }).references(() => user.id, { onDelete: "set null" }),
-	bookingChangeLogId: varchar("booking_change_log_id", { length: 21 }).references(() => bookingChangeLog.id, { onDelete: "set null" }),
-	createdAt: timestamp("created_at", { withTimezone: true })
-		.defaultNow()
-		.notNull(),
-})
-
 export const keyTransactionLog = pgTable("key_transaction_log", {
 	id: varchar("id", { length: 21 }).primaryKey(),
 	reservationId: varchar("reservation_id", { length: 21 }).references(() => reservation.id, { onDelete: "set null" }),
@@ -141,10 +124,8 @@ export const keyTransactionLog = pgTable("key_transaction_log", {
 export const userRelation = relations(user, ({ many }) => ({
 	infractions: many(infraction),
 	keyTransactions: many(keyTransactionLog),
-	notificationLogs: many(notificationLog),
 	announcements: many(announcement),
 	blacklists: many(blacklist),
-	bookingChangeLogs: many(bookingChangeLog),
 	reservations: many(reservation),
 }))
 
@@ -166,11 +147,6 @@ export const infractionRelation = relations(infraction, ({ one }) => ({
 	blacklist: one(blacklist, { fields: [infraction.id], references: [blacklist.infractionId] }),
 }))
 
-export const notification_logRelation = relations(notificationLog, ({ one }) => ({
-	user: one(user, { fields: [notificationLog.userId], references: [user.id] }),
-	bookingChangeLog: one(bookingChangeLog, { fields: [notificationLog.bookingChangeLogId], references: [bookingChangeLog.id] }),
-}));
-
 export const keyTransactionLogRelation = relations(keyTransactionLog, ({ one }) => ({
 	brrowedToUser: one(user, { fields: [keyTransactionLog.borrowedTo], references: [user.id] }),
 	handledByUser: one(user, { fields: [keyTransactionLog.handledBy], references: [user.id] }),
@@ -188,16 +164,10 @@ export const classroomRelation = relations(classroom, ({ many }) => ({
 	reservations: many(reservation),
 }));
 
-export const booking_change_logRelation = relations(bookingChangeLog, ({ one }) => ({
-	actorUser: one(user, { fields: [bookingChangeLog.actorUserId], references: [user.id] }),
-	reservation: one(reservation, { fields: [bookingChangeLog.reservationId], references: [reservation.id] }),
-}));
-
 export const reservationRelation = relations(reservation, ({ one, many }) => ({
 	user: one(user, { fields: [reservation.userId], references: [user.id] }),
 	classroom: one(classroom, { fields: [reservation.classroomId], references: [classroom.id] }),
 	approvedByUser: one(user, { fields: [reservation.approvedBy], references: [user.id] }),
-	bookingChangeLogs: many(bookingChangeLog),
 	infraction: one(infraction, { fields: [reservation.id], references: [infraction.reservationId] }),
 	keyTransactionLogs: many(keyTransactionLog),
 }));

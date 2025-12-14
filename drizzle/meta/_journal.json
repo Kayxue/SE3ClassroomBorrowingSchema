@@ -15,6 +15,13 @@
       "when": 1765472823975,
       "tag": "0001_curvy_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765631060216,
+      "tag": "0002_polite_mantis",
+      "breakpoints": true
     }
   ]
 }
