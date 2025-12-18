@@ -19,6 +19,17 @@ export const classroomStatus = pgEnum("ClassroomStatus", [
 	"maintenance",
 ]);
 
+export const passwordReset = pgTable("password_reset", {
+	id: varchar("id", { length: 21 }).primaryKey(),
+	email: text("email").notNull(),
+	code: text("code").notNull(),
+	codeExpiresAt: timestamp("code_expires_at", { withTimezone: true }).notNull(),
+	resetToken: text("reset_token").notNull(),
+	resetTokenExpiresAt: timestamp("reset_token_expires_at", { withTimezone: true }).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const user = pgTable("user", {
 	id: varchar("id", { length: 21 }).primaryKey(),
 	username: text("username").notNull().unique(),
